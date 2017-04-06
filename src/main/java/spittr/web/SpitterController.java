@@ -56,6 +56,7 @@ public class SpitterController {
     return "home";
   }
 
+  //@RequestParam(value="count", defaultValue="20") for query, ex: /spittles/1?count=4
   @RequestMapping(value="/{username}", method=GET)
   public String showSpitterProfile(@PathVariable String username, Model model) {
 	SpitterModel spitter = spitterRepository.findByUsername(username);
