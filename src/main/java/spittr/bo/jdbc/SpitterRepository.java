@@ -1,4 +1,4 @@
-package spittr.data;
+package spittr.bo.jdbc;
 
 import spittr.Spitter;
 

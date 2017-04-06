@@ -1,44 +1,51 @@
 package spittr.web;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import spittr.Spitter;
-import spittr.data.SpitterRepository;
+import spittr.bo.SpitterBO;
+import spittr.bo.impl.SpitterBOImpl;
+import spittr.model.SpitterModel;
 
 @Controller
 @RequestMapping("/spitter")
 public class SpitterController {
 
-  private SpitterRepository spitterRepository;
+	@Autowired
+  private SpitterBO spitterRepository;
 
-  @Autowired
-  public SpitterController(SpitterRepository spitterRepository) {
+	@Inject
+  public SpitterController(SpitterBOImpl spitterRepository) {
     this.spitterRepository = spitterRepository;
   }
   
   @RequestMapping(value="/register", method=GET)
   public String showRegistrationForm(Model model) {
-    model.addAttribute(new Spitter());
+    model.addAttribute(new SpitterModel());
     return "registerForm";
   }
   
   @RequestMapping(value="/register", method=POST)
   public String processRegistration(
-      @Valid Spitter spitter, 
+      @Valid @ModelAttribute("spitter") SpitterModel spitter, 
       Errors errors) {
+	
     if (errors.hasErrors()) {
       return "registerForm";
     }
-    
+    System.out.println(spitter.toString());
     spitterRepository.save(spitter);
     return "redirect:/spitter/" + spitter.getUsername();
   }
@@ -51,8 +58,9 @@ public class SpitterController {
 
   @RequestMapping(value="/{username}", method=GET)
   public String showSpitterProfile(@PathVariable String username, Model model) {
-    Spitter spitter = spitterRepository.findByUsername(username);
-    model.addAttribute(spitter);
+	SpitterModel spitter = spitterRepository.findByUsername(username);
+    model.addAttribute("spitter",spitter);
+    System.out.println(spitter.toString());
     return "profile";
   }
   

@@ -1,47 +1,41 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%-- <%@ page session="false" %> --%>
+
+<!DOCTYPE html>
+<html>
   <head>
     <title>Spitter</title>
     <link rel="stylesheet" type="text/css" 
-          th:href="@{/resources/style.css}"></link>
+          href="<spring:url value="/resources/style.css" />"></link>
   </head>
   <body>
-    <div id="header" th:include="page :: header"></div>
 
     <div id="content">
       <h1>Register</h1>
   
-      <form method="POST" th:object="${spitter}" th:action="@{/spitter/register}">
-        <div class="errors" th:if="${#fields.hasErrors('*')}">
-          <ul>
-            <li th:each="err : ${#fields.errors('*')}" 
-                th:text="${err}">Input is incorrect</li>
-          </ul>
-        </div>
-        <label th:class="${#fields.hasErrors('firstName')}? 'error'">First Name</label>: 
-          <input type="text" th:field="*{firstName}"  
-                 th:class="${#fields.hasErrors('firstName')}? 'error'" /><br/>
+      <form method="POST"  action="<spring:url value="/spitter/register" />">
+     
   
-        <label th:class="${#fields.hasErrors('lastName')}? 'error'">Last Name</label>: 
-          <input type="text" th:field="*{lastName}"
-                 th:class="${#fields.hasErrors('lastName')}? 'error'" /><br/>
+        <label>Full Name</label>: 
+          <input type="text" name="fullName" /><br/>
   
-        <label th:class="${#fields.hasErrors('email')}? 'error'">Email</label>: 
-          <input type="text" th:field="*{email}"
-                 th:class="${#fields.hasErrors('email')}? 'error'" /><br/>
+        <label>Email</label>: 
+          <input type="text" name="email"  /><br/>
   
-        <label th:class="${#fields.hasErrors('username')}? 'error'">Username</label>: 
-          <input type="text" th:field="*{username}"
-                 th:class="${#fields.hasErrors('username')}? 'error'" /><br/>
+        <label>Username</label>: 
+          <input type="text" name="username" /><br/>
   
-        <label th:class="${#fields.hasErrors('password')}? 'error'">Password</label>: 
-          <input type="password" th:field="*{password}"  
-                 th:class="${#fields.hasErrors('password')}? 'error'" /><br/>
+        <label>Password</label>: 
+          <input type="password" name="password"  /><br/>
+          <input type="hidden"
+						name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="submit" value="Register" />
       
       
       </form>
     </div>
-    <div id="footer" th:include="page :: copy"></div>
   </body>
 </html>
